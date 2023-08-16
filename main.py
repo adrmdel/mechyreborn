@@ -1,5 +1,6 @@
-import random
+import asyncio
 import sys
+import time
 from typing import Optional, Literal
 
 import discord
@@ -8,9 +9,17 @@ from discord.ext.commands import Greedy, Context
 
 from functions.dice import roll
 from functions.eightball import eightball
+from functions.reminder import reminder, check_and_clear_reminders
+from functions.quote import quote
+from database import connect
 
 client = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 token = sys.argv[1]
+database_password = sys.argv[2]
+
+database = connect(database_password)['public']
+reminders_table = database['reminders']
+quotes_table = database['quotes']
 
 
 @client.hybrid_command(name='echo')
@@ -31,6 +40,23 @@ async def cmd_eightball(ctx, *, query: Optional[str]):
 @client.hybrid_command(name='roll')
 async def cmd_roll(ctx, *, query: Optional[str]):
     await ctx.send(roll(query))
+
+
+@client.hybrid_command(name='remind')
+async def cmd_reminder(ctx, *, query: str):
+    await ctx.send(reminder(ctx, query, reminders_table))
+
+
+@client.hybrid_command(name='checkreminders')
+async def cmd_check_reminder(_ctx: Optional[Context]):
+    result = check_and_clear_reminders(reminders_table)
+    for x in result:
+        await client.get_channel(x['chan_id']).send('{}: {}'.format(x['author'], x['message']))
+
+
+@client.hybrid_command("quote")
+async def cmd_quote(ctx, *, query: str):
+    await ctx.send(quote(ctx, query, quotes_table))
 
 
 # Umbra's Sync
@@ -73,6 +99,19 @@ async def on_message(msg):
     # if msg.author != client.user:
     #     await msg.channel.send('haha')
     await client.process_commands(msg)
+
+
+@client.event
+async def on_ready():
+    client.loop.create_task(reminder_schedule(60))
+
+
+async def reminder_schedule(delay):
+    next_time = time.time() + delay
+    while True:
+        await asyncio.sleep(max(0, next_time - time.time()))
+        await cmd_check_reminder(None)
+        next_time += (time.time() - next_time) // delay * delay + delay
 
 
 client.run(token)
