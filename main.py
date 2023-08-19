@@ -16,7 +16,7 @@ from functions.reminder import reminder, check_and_clear_reminders
 from functions.quote import quote
 from database import connect
 
-client = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+client = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 token = sys.argv[1]
 database_uri = sys.argv[2]
 
@@ -75,8 +75,8 @@ async def cmd_quote(ctx, *, query: Optional[str]):
 # Umbra's Sync
 @client.command()
 @commands.guild_only()
-async def sync(
-        ctx: Context, guilds: Greedy[discord.Object], spec: Optional[Literal["~", "*", "^"]] = None) -> None:
+@commands.is_owner()
+async def sync(ctx: Context, guilds: Greedy[discord.Object], spec: Optional[Literal["~", "*", "^"]] = None) -> None:
     if not guilds:
         if spec == "~":
             synced = await ctx.bot.tree.sync(guild=ctx.guild)
