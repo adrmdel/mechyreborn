@@ -18,9 +18,9 @@ from database import connect
 
 client = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 token = sys.argv[1]
-database_password = sys.argv[2]
+database_uri = sys.argv[2]
 
-database = connect(database_password)['public']
+database = connect(database_uri)['public']
 reminders_table = database['reminders']
 quotes_table = database['quotes']
 
