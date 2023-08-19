@@ -1,1 +1,1 @@
-worker: python -m bot $token $DATABASE_URL
+worker: python -m main $token $DATABASE_URL
