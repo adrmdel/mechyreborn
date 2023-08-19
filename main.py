@@ -110,7 +110,7 @@ async def sync(ctx: Context, guilds: Greedy[discord.Object], spec: Optional[Lite
 @client.event
 async def on_message(msg: Message):
     if msg.author != client.user:
-        if (type(msg.clean_content) is str and msg.clean_content[0].isnumeric()) and \
+        if (type(msg.clean_content) is str and len(msg.clean_content) > 0 and msg.clean_content[0].isnumeric()) and \
                 (len(re.findall(main_regex, msg.clean_content)) > 0 or
                  len(re.findall(cod_regex, msg.clean_content)) > 0 or
                  len(re.findall(exalted_regex, msg.clean_content)) > 0):
