@@ -33,18 +33,18 @@ def check_alias(query):
     if len(cod_roll) > 0:  # cofd rules
         result = cod_roll[0]
         if result[1] == 'r':
-            return '{}d10t8e1001{}'.format(
+            return '{}d10t8e100001{}'.format(
                 result[0],
                 ' ' + result[2] if result[2] != '' else '')
         return '{}d10t8e{}{}'.format(
             result[0],
-            result[1] if result[1] != '' else '10' if result[1] != 'r' else '-2',
+            result[1] if result[1].isnumeric() else '10' if result[1] != 'r' else '-2',
             ' '+result[2] if result[2] != '' else '')
     elif len(exalted_roll) > 0:  # exalted rules
         result = exalted_roll[0]
         return '{}d10t7x{}{}{}'.format(
             result[0],
-            result[1] if result[1] != '' else '10',
+            result[1] if result[1].isnumeric() else '10',
             result[2] if result[2] != '' else '',
             ' '+result[3] if len(result[3]) > 0 else '')
     return query
@@ -95,9 +95,9 @@ def count_successes():
 
 def format_result(final_tally, comment):
     if comment != '':
-        return '*{}*: {} => **{}**'.format(comment, list_results if len(list_results) > 1 else list_results[0], final_tally)
+        return '*{}* -- {} -> **{}**'.format(comment, list_results if len(list_results) > 1 else list_results[0], final_tally)
     else:
-        return '{} => **{}**'.format(list_results if len(list_results) > 1 else list_results[0], final_tally)
+        return '{} -> **{}**'.format(list_results if len(list_results) > 1 else list_results[0], final_tally)
 
 
 def roll(query):
@@ -107,11 +107,12 @@ def roll(query):
     for sub_roll in rolls:
         if sub_roll[7] != '':
             comment = sub_roll[7]
-        if sub_roll[3] != '':
+            continue
+        if sub_roll[3].isnumeric():
             current_mode['target'] = int(sub_roll[3]) if current_mode['target'] == -1 else current_mode['target']
-        if sub_roll[4] != '':
+        if sub_roll[4].isnumeric():
             current_mode['explosion'] = int(sub_roll[4]) if current_mode['explosion'] == -1 else current_mode['explosion']
-        if sub_roll[5] != '':
+        if sub_roll[5].isnumeric():
             current_mode['double'] = int(sub_roll[5]) if current_mode['double'] == -1 else current_mode['double']
         if sub_roll[6] != '':  # flat mod
             running_total += int(sub_roll[6])

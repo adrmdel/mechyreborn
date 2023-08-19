@@ -11,7 +11,7 @@ def reminder(ctx, query, database):
     target_date, message = query.split(' ', 1)
     result = list(re.findall(time_regex, target_date)[0])
     for x in range(len(result)):
-        result[x] = int(result[x]) if result[x] != '' else 0
+        result[x] = int(result[x]) if result[x].isnumeric() else 0
     now = datetime.datetime.now()
     then = now + relativedelta(years=int(result[0]),
                                months=int(result[1]),
@@ -29,9 +29,9 @@ def reminder(ctx, query, database):
         })
         return 'Done!'
     except pymongo.errors.OperationFailure:
-        return 'uhOh'
+        return 'I cannot reach the database. Please try again later.'
     except ValueError:
-        return 'Invalid input.'
+        return 'You have formatted the request incorrectly.'
 
 
 def check_and_clear_reminders(database):
@@ -40,5 +40,4 @@ def check_and_clear_reminders(database):
     for entry in cursor:
         result.append(entry)
         database.delete_one(entry)
-    print(result)
     return result
