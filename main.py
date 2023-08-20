@@ -41,7 +41,7 @@ async def cmd_eightball(ctx, *, query: Optional[str]):
     await ctx.send(format_response(ctx.author, response))
 
 
-@client.hybrid_command(name='choose')
+@client.hybrid_command(name='ch')
 async def cmd_choose(ctx, *, query):
     response = random.choice(query.split(','))
     await ctx.send(format_response(ctx.author, response))
