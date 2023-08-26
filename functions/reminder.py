@@ -4,7 +4,7 @@ import datetime
 import pymongo.errors
 from dateutil.relativedelta import *
 
-time_regex = r'(?:(\d+)y)?(?:(\d+)mo)?(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)min)?'
+time_regex = r'(?:(\d+)y)?(?:(\d+)mo)?(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?'
 
 
 def reminder(ctx, query, database):
