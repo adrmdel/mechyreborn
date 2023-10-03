@@ -101,30 +101,36 @@ def format_result(final_tally, comment):
 
 
 def roll(query):
-    running_total = 0
-    rolls = re.findall(main_regex, check_alias(query))
-    comment = ''
-    for sub_roll in rolls:
-        if sub_roll[7] != '':
-            comment = sub_roll[7]
-            continue
-        if sub_roll[3].isnumeric():
-            current_mode['target'] = int(sub_roll[3]) if current_mode['target'] == -1 else current_mode['target']
-        if sub_roll[4].isnumeric():
-            current_mode['explosion'] = int(sub_roll[4]) if current_mode['explosion'] == -1 else current_mode['explosion']
-        if sub_roll[5].isnumeric():
-            current_mode['double'] = int(sub_roll[5]) if current_mode['double'] == -1 else current_mode['double']
-        if sub_roll[6] != '':  # flat mod
-            running_total += int(sub_roll[6])
-            continue
-        elif sub_roll[1] != '':
-            process_step(int(sub_roll[1]), int(sub_roll[2]))
-        if current_mode['target'] == -1:
-            running_total += sum(list_results[-1])*-1 if sub_roll[0] == '-' else sum(list_results[-1])
-    if current_mode['target'] != -1:
-        count_of_successes = count_successes()
-        final_result = format_result(str(count_of_successes + running_total) + ' successes', comment)
-    else:
-        final_result = format_result(running_total, comment)
-    clean_up()
-    return final_result
+    try:
+        running_total = 0
+        rolls = re.findall(main_regex, check_alias(query))
+        comment = ''
+        for sub_roll in rolls:
+            if sub_roll[7] != '':
+                comment = sub_roll[7]
+                continue
+            if sub_roll[3].isnumeric():
+                current_mode['target'] = int(sub_roll[3]) if current_mode['target'] == -1 else current_mode['target']
+            if sub_roll[4].isnumeric():
+                current_mode['explosion'] = int(sub_roll[4]) if current_mode['explosion'] == -1 else current_mode['explosion']
+            if sub_roll[5].isnumeric():
+                current_mode['double'] = int(sub_roll[5]) if current_mode['double'] == -1 else current_mode['double']
+            if sub_roll[6] != '':  # flat mod
+                running_total += int(sub_roll[6])
+                continue
+            elif sub_roll[1] != '':
+                process_step(int(sub_roll[1]), int(sub_roll[2]))
+            if current_mode['target'] == -1:
+                running_total += sum(list_results[-1])*-1 if sub_roll[0] == '-' else sum(list_results[-1])
+        if current_mode['target'] != -1:
+            count_of_successes = count_successes()
+            final_result = format_result(str(count_of_successes + running_total) + ' successes', comment)
+        else:
+            final_result = format_result(running_total, comment)
+        clean_up()
+        return final_result
+    except Exception:
+        clean_up()
+        print(query)
+        print('Something has gone wrong with the above command.')
+        return 'Something has gone wrong.'
