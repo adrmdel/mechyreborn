@@ -107,6 +107,8 @@ def roll(query):
         comment = ''
         for sub_roll in rolls:
             if sub_roll[7] != '':
+                if running_total == 0 or len(list_results) == 0:
+                    raise ValueError
                 comment = sub_roll[7]
                 continue
             if sub_roll[3].isnumeric():
@@ -129,6 +131,8 @@ def roll(query):
             final_result = format_result(running_total, comment)
         clean_up()
         return final_result
+    except ValueError:
+        return ValueError
     except Exception:
         clean_up()
         print(query)

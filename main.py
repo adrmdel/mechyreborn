@@ -114,7 +114,10 @@ async def on_message(msg: Message):
                 (len(re.findall(main_regex, msg.clean_content)) > 0 or
                  len(re.findall(cod_regex, msg.clean_content)) > 0 or
                  len(re.findall(exalted_regex, msg.clean_content)) > 0):
-            await msg.channel.send(format_response(msg.author, roll(msg.clean_content)))
+            response = roll(msg.clean_content)
+            if response is ValueError:  # TODO:overzealous regex, consider fixing later
+                return
+            await msg.channel.send(format_response(msg.author, response))
     await client.process_commands(msg)
 
 

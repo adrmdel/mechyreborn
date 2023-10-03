@@ -18,7 +18,6 @@ def quote(ctx: Context, query, database):
         print('try adding')
         try:
             _, author, text = query.split(' ', 2)
-            print(text)
             database.insert_one(document={
                 "serv_id": str(ctx.guild.id),
                 "chan_id": str(ctx.channel.id),
