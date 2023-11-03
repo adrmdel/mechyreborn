@@ -131,10 +131,11 @@ def roll(query):
             final_result = format_result(running_total, comment)
         clean_up()
         return final_result
-    except ValueError:
+    except (ValueError, IndexError):
         clean_up()
         return ValueError
-    except Exception:
+    except Exception as e:
+        print(e)
         clean_up()
         print(query)
         print('Something has gone wrong with the above command.')
