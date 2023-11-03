@@ -105,7 +105,6 @@ def roll(query):
         running_total = 0
         rolls = re.findall(main_regex, check_alias(query))
         comment = ''
-        print(rolls)
         for sub_roll in rolls:
             if sub_roll[3].isnumeric():
                 current_mode['target'] = int(sub_roll[3]) if current_mode['target'] == -1 else current_mode['target']
