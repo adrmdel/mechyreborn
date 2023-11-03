@@ -106,11 +106,6 @@ def roll(query):
         rolls = re.findall(main_regex, check_alias(query))
         comment = ''
         for sub_roll in rolls:
-            if sub_roll[7] != '':
-                if running_total == 0 or len(list_results) == 0:
-                    raise ValueError
-                comment = sub_roll[7]
-                continue
             if sub_roll[3].isnumeric():
                 current_mode['target'] = int(sub_roll[3]) if current_mode['target'] == -1 else current_mode['target']
             if sub_roll[4].isnumeric():
@@ -124,6 +119,11 @@ def roll(query):
                 process_step(int(sub_roll[1]), int(sub_roll[2]))
             if current_mode['target'] == -1:
                 running_total += sum(list_results[-1])*-1 if sub_roll[0] == '-' else sum(list_results[-1])
+            if sub_roll[7] != '':
+                if running_total == 0 or len(list_results) == 0:
+                    raise ValueError
+                comment = sub_roll[7]
+                continue
         if current_mode['target'] != -1:
             count_of_successes = count_successes()
             final_result = format_result(str(count_of_successes + running_total) + ' successes', comment)
