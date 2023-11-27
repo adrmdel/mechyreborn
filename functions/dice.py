@@ -100,6 +100,19 @@ def format_result(final_tally, comment):
         return '{} -> **{}**'.format(list_results if len(list_results) > 1 else list_results[0], final_tally)
 
 
+def pre_format_count_of_successes(count, modifier):
+    result = str(count + modifier)
+    if modifier < 0:
+        if count == modifier * -1:
+            return 'Success! Meets difficulty!'
+        elif count < modifier * -1:
+            return 'Failure!'
+        else:
+            return 'Success! {} over!'.format(result)
+    else:
+        return result + ' successes!'
+
+
 def roll(query):
     try:
         running_total = 0
@@ -116,8 +129,8 @@ def roll(query):
                 running_total += int(sub_roll[6])
             elif sub_roll[1] != '':
                 process_step(int(sub_roll[1]), int(sub_roll[2]))
-            if current_mode['target'] == -1:
-                running_total += sum(list_results[-1])*-1 if sub_roll[0] == '-' else sum(list_results[-1])
+                if current_mode['target'] == -1:
+                    running_total += sum(list_results[-1])*-1 if sub_roll[0] == '-' else sum(list_results[-1])
             if sub_roll[7] != '':
                 if running_total == 0 and len(list_results) == 0:
                     raise ValueError
@@ -125,7 +138,8 @@ def roll(query):
                 continue
         if current_mode['target'] != -1:
             count_of_successes = count_successes()
-            final_result = format_result(str(count_of_successes + running_total) + ' successes', comment)
+            to_format = pre_format_count_of_successes(count_of_successes, running_total)
+            final_result = format_result(to_format, comment)
         else:
             final_result = format_result(running_total, comment)
         clean_up()
