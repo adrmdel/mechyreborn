@@ -32,7 +32,6 @@ def check_alias(query):
     cod_roll = re.findall(cod_regex, query)
     exalted_roll = re.findall(exalted_regex, query)
     paragons_roll = re.findall(paragons_regex, query)
-    print(paragons_roll)
     if len(cod_roll) > 0:  # cofd rules
         result = cod_roll[0]
         if result[1] == 'r':
@@ -52,8 +51,6 @@ def check_alias(query):
             ' '+result[3] if len(result[3]) > 0 else '')
     elif len(paragons_roll) > 0: #prowlers and paragons rules
         result = paragons_roll[0]
-        print(result[0])
-        print(result[1])
         return '{}d6t4x6{}'.format(
             result[0],
             ' ' + result[1] if result[1] != '' else '')
