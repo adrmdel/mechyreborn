@@ -50,6 +50,8 @@ def check_alias(query):
             result[2] if result[2] != '' else '',
             ' '+result[3] if len(result[3]) > 0 else '')
     elif len(paragons_roll) > 0:
+        print('paragons roll')
+        print(paragons_roll)
         result = paragons_roll[0]
         return '{}d6t4x6{}'.format(
             result[0],
