@@ -4,7 +4,7 @@ import re
 main_regex = r'([+-]?)(\d+)d(\d+)(?:t(\d+)|e(\d+)|x(\d+))*|([+-]\d+)| (.+$)'
 cod_regex = r'(\d+)co[f]?d(\d+|r)? ?(.+$)?'
 exalted_regex = r'(\d+)ex(\d+)?([+-](?:\d+))? ?(.+$)?'
-paragons_regex = r'(\d+)para(\d+|r)? ?(.+$)?'
+paragons_regex = r'(\d+)para ?(.+$)?'
 
 '''
 I need to keep this in my head properly because regex is a labyrinthine monster which I have delved too deeply within.
@@ -53,7 +53,7 @@ def check_alias(query):
         result = paragons_roll[0]
         return '{}d6t4x6{}'.format(
             result[0],
-            ' ' + result[2] if result[2] != '' else '')
+            ' ' + result[1] if result[1] != '' else '')
     return query
 
 
