@@ -114,7 +114,7 @@ async def on_message(msg: Message):
                 (len(re.findall(main_regex, msg.clean_content)) > 0 or
                  len(re.findall(cod_regex, msg.clean_content)) > 0 or
                  len(re.findall(exalted_regex, msg.clean_content)) > 0 or
-                 len(re.findall(paragons_regex, msg.clean_content))):
+                 len(re.findall(paragons_regex, msg.clean_content)) > 0):
             response = roll(msg.clean_content)
             if response is ValueError:  # TODO:overzealous regex, consider fixing later
                 return
