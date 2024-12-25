@@ -4,6 +4,7 @@ import re
 main_regex = r'([+-]?)(\d+)d(\d+)(?:t(\d+)|e(\d+)|x(\d+))*|([+-]\d+)| (.+$)'
 cod_regex = r'(\d+)co[f]?d(\d+|r)? ?(.+$)?'
 exalted_regex = r'(\d+)ex(\d+)?([+-](?:\d+))? ?(.+$)?'
+paragons_regex = r'(\d+)para ?(.+$)?'
 
 '''
 I need to keep this in my head properly because regex is a labyrinthine monster which I have delved too deeply within.
@@ -30,6 +31,7 @@ current_mode = {'target': -1, 'explosion': -1, 'double': -1}
 def check_alias(query):
     cod_roll = re.findall(cod_regex, query)
     exalted_roll = re.findall(exalted_regex, query)
+    paragons_roll = re.findall(paragons_regex, query)
     if len(cod_roll) > 0:  # cofd rules
         result = cod_roll[0]
         if result[1] == 'r':
@@ -47,6 +49,11 @@ def check_alias(query):
             result[1] if result[1].isnumeric() else '10',
             result[2] if result[2] != '' else '',
             ' '+result[3] if len(result[3]) > 0 else '')
+    elif len(paragons_roll) > 0: #prowlers and paragons rules
+        result = paragons_roll[0]
+        return '{}d6t4x6{}'.format(
+            result[0],
+            ' ' + result[1] if result[1] != '' else '')
     return query
 
 

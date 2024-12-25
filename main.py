@@ -10,7 +10,7 @@ from discord import Message
 from discord.ext import commands
 from discord.ext.commands import Greedy, Context
 
-from functions.dice import roll, main_regex, cod_regex, exalted_regex
+from functions.dice import roll, main_regex, cod_regex, exalted_regex, paragons_regex
 from functions.eightball import eightball
 from functions.reminder import reminder, check_and_clear_reminders
 from functions.quote import quote
@@ -113,7 +113,8 @@ async def on_message(msg: Message):
         if (type(msg.clean_content) is str and len(msg.clean_content) > 0 and msg.clean_content[0].isnumeric()) and \
                 (len(re.findall(main_regex, msg.clean_content)) > 0 or
                  len(re.findall(cod_regex, msg.clean_content)) > 0 or
-                 len(re.findall(exalted_regex, msg.clean_content)) > 0):
+                 len(re.findall(exalted_regex, msg.clean_content)) > 0 or
+                 len(re.findall(paragons_regex, msg.clean_content)) > 0):
             response = roll(msg.clean_content)
             if response is ValueError:  # TODO:overzealous regex, consider fixing later
                 return
